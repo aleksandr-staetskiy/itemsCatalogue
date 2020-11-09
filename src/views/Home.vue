@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 <template>
   <v-container>
     <v-row class="text-center justify-space-between">
@@ -16,6 +17,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import Cart from '@/components/Cart.vue';
 import Catalogue from '@/components/Catalogue.vue';
 import { mapActions, mapGetters } from 'vuex';
+import { IGood } from '@/store/models';
 
 @Component({
   components: {
@@ -26,9 +28,10 @@ import { mapActions, mapGetters } from 'vuex';
   methods: { ...mapActions(['getProducts']) },
 })
 export default class Home extends Vue {
+  goods!: IGood[];
+
   get categorized() {
-    return this.goods.reduce((acc, item) => {
-      console.log(item);
+    return this.goods.reduce((acc: any, item: any) => {
       if (!acc[item.G]) {
         acc[item.G] = [];
       }

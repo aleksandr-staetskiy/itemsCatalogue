@@ -19,3 +19,7 @@ export interface IProducts {
   Value: IValue;
 }
 
+export interface ICart {
+  id: number;
+  quantity: number;
+}

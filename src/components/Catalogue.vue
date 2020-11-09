@@ -13,7 +13,7 @@
       <v-list-item
         v-for="item in elem"
         :key="item.B"
-        @click="test(ietem)"
+        @click="addToCart(item)"
       >
         <v-list-item-content>
           <v-list-item-title v-text="matchesList[name].B[item.T].N "></v-list-item-title>
@@ -34,39 +34,20 @@ import {
   Vue, Component, Prop, Watch,
 } from 'vue-property-decorator';
 import names from '@/names.json';
+import { mapActions, mapMutations } from 'vuex';
+import Convert from '@/components/base/Convert.vue';
 
-@Component
-export default class Catalogue extends Vue {
+@Component({
+  components: { Convert },
+  methods: { ...mapActions(['addToCart']) },
+})
+export default class Catalogue extends Convert {
   @Prop({ type: Object, default: () => [] }) readonly list!: IGood;
 
   matchesList = names
 
-  currentCourse = 80
-
-  isCurrencyGrowing = false
-
-  @Watch('currentCourse')
-  handleCourseChange(oldVal: number, newVal: number) {
-    console.log(oldVal);
-    if (oldVal < newVal) {
-      this.isCurrencyGrowing = true;
-    } else {
-      this.isCurrencyGrowing = false;
-    }
-  }
-
-  convert(val): number {
-    return val * this.currentCourse;
-  }
-
-  randomCourse() {
-    setInterval(() => {
-      this.currentCourse = Math.floor(Math.random() * 80) + 20;
-    }, 5000);
-  }
-
-  mounted() {
-    this.randomCourse();
+  addToCart(elem: IGood) {
+    this.$store.dispatch('addToCart', elem);
   }
 }
 </script>

@@ -3,24 +3,29 @@
     <template v-slot:default>
       <thead v-if="list.length">
         <tr>
-          <th v-for="(value, name) in list[0]" :key="name" class="text-left">
-           {{ name }}
+          <th class="text-left">
+           наименование товара
+          </th>
+          <th class="text-left">
+           количество
+          </th>
+          <th class="text-left">
+           цена
           </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="item in list"
-          :key="item.name"
+          v-for="(item, index) in list"
+          :key="item.groupId"
         >
-          <td>{{ item.name }}</td>
-          <td>{{ item.calories }}</td>
           <td>
-            <v-text-field
-            label="Regular"
-          ></v-text-field>
-            </td>
-          <td>{{ item.test }}</td>
+            {{ matchList[item.groupId].G }}.
+            {{ matchList[item.groupId].B[item.id].N }}
+          </td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ convert(item.price) | currency }}</td>
+          <td @click="deleteProduct(index)">удалить</td>
         </tr>
       </tbody>
     </template>
@@ -29,10 +34,17 @@
 
 <script lang="ts">
 import { Component, Prop } from 'vue-property-decorator';
-import { VSimpleTable } from 'vuetify/lib';
+import names from '@/names.json';
+import Convert from '@/components/base/Convert.vue';
 
 @Component
-export default class BaseTable extends VSimpleTable {
+export default class BaseTable extends Convert {
   @Prop({ type: Array, default: () => [] }) readonly list?: Array<any>;
+
+  matchList = names
+
+  deleteProduct(i: number) {
+    this.$emit('delete-product', i);
+  }
 }
 </script>
